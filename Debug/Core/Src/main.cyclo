@@ -1,0 +1,15 @@
+../Core/Src/main.c:100:10:Get_SysTime	1
+../Core/Src/main.c:105:6:System_EnterSleep	1
+../Core/Src/main.c:140:6:Get_Coordinate	1
+../Core/Src/main.c:155:6:Square2Disc	1
+../Core/Src/main.c:172:6:HAL_GPIO_EXTI_Callback	4
+../Core/Src/main.c:184:6:xl1278_TxCpltCallback	1
+../Core/Src/main.c:189:6:xl1278_RxCpltCallback	1
+../Core/Src/main.c:195:6:HAL_UART_RxCpltCallback	1
+../Core/Src/main.c:203:6:HAL_TIM_PeriodElapsedCallback	9
+../Core/Src/main.c:272:6:lv_scr_init	1
+../Core/Src/main.c:307:6:lv_ex_label	1
+../Core/Src/main.c:536:6:SystemClock_Config	4
+../Core/Src/main.c:112:6:System_EnterStop	1
+../Core/Src/main.c:390:5:main	9
+../Core/Src/main.c:588:6:Error_Handler	1

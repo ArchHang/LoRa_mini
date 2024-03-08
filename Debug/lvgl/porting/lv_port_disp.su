@@ -1,0 +1,2 @@
+../lvgl/porting/lv_port_disp.c:138:13:disp_flush	16	static
+../lvgl/porting/lv_port_disp.c:44:6:lv_port_disp_init	16	static
