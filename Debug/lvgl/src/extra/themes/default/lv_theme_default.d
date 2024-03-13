@@ -193,17 +193,7 @@ lvgl/src/extra/themes/default/lv_theme_default.o: \
  ../lvgl/src/extra/themes/default/../../../../src/extra/others/monkey/lv_monkey.h \
  ../lvgl/src/extra/themes/default/../../../../src/extra/others/monkey/../../../lvgl.h \
  ../lvgl/src/extra/themes/default/../../../../src/extra/others/gridnav/lv_gridnav.h \
- ../lvgl/src/extra/themes/default/../../../../src/extra/others/gridnav/../../../core/lv_obj.h \
- ../lvgl/src/extra/themes/default/lv_theme_default.h \
- ../lvgl/src/extra/themes/default/../../../misc/lv_gc.h \
- ../lvgl/src/extra/themes/default/../../../misc/../lv_conf_internal.h \
- ../lvgl/src/extra/themes/default/../../../misc/lv_mem.h \
- ../lvgl/src/extra/themes/default/../../../misc/lv_ll.h \
- ../lvgl/src/extra/themes/default/../../../misc/lv_timer.h \
- ../lvgl/src/extra/themes/default/../../../misc/lv_types.h \
- ../lvgl/src/extra/themes/default/../../../misc/../draw/lv_img_cache.h \
- ../lvgl/src/extra/themes/default/../../../misc/../draw/lv_draw_mask.h \
- ../lvgl/src/extra/themes/default/../../../misc/../core/lv_obj_pos.h
+ ../lvgl/src/extra/themes/default/../../../../src/extra/others/gridnav/../../../core/lv_obj.h
 ../lvgl/src/extra/themes/default/../../../lvgl.h:
 ../lvgl/src/extra/themes/default/../../../../lvgl.h:
 ../lvgl/src/extra/themes/default/../../../../src/misc/lv_log.h:
@@ -398,13 +388,3 @@ E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/extra/themes/default/../../../../src/extra/others/monkey/../../../lvgl.h:
 ../lvgl/src/extra/themes/default/../../../../src/extra/others/gridnav/lv_gridnav.h:
 ../lvgl/src/extra/themes/default/../../../../src/extra/others/gridnav/../../../core/lv_obj.h:
-../lvgl/src/extra/themes/default/lv_theme_default.h:
-../lvgl/src/extra/themes/default/../../../misc/lv_gc.h:
-../lvgl/src/extra/themes/default/../../../misc/../lv_conf_internal.h:
-../lvgl/src/extra/themes/default/../../../misc/lv_mem.h:
-../lvgl/src/extra/themes/default/../../../misc/lv_ll.h:
-../lvgl/src/extra/themes/default/../../../misc/lv_timer.h:
-../lvgl/src/extra/themes/default/../../../misc/lv_types.h:
-../lvgl/src/extra/themes/default/../../../misc/../draw/lv_img_cache.h:
-../lvgl/src/extra/themes/default/../../../misc/../draw/lv_draw_mask.h:
-../lvgl/src/extra/themes/default/../../../misc/../core/lv_obj_pos.h:

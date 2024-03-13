@@ -6,7 +6,7 @@
 ../lvgl/src/hal/lv_hal_disp.c:623:13:set_px_cb_alpha2	40	static
 ../lvgl/src/hal/lv_hal_disp.c:78:6:lv_disp_drv_init	8	static
 ../lvgl/src/hal/lv_hal_disp.c:133:6:lv_disp_draw_buf_init	24	static
-../lvgl/src/hal/lv_hal_disp.c:149:13:lv_disp_drv_register	40	static
+../lvgl/src/hal/lv_hal_disp.c:149:13:lv_disp_drv_register	24	static
 ../lvgl/src/hal/lv_hal_disp.c:229:6:lv_disp_drv_update	32	static
 ../lvgl/src/hal/lv_hal_disp.c:270:6:lv_disp_remove	24	static
 ../lvgl/src/hal/lv_hal_disp.c:310:6:lv_disp_set_default	0	static

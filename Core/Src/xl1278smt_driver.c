@@ -21,7 +21,7 @@ XL1278_Device_PCB LoRa0;
   */
 void Delay_cycles(uint32_t delay_cycle)
 {
-	for(volatile uint32_t i=0; i<delay_cycle; i++);
+	for (volatile uint32_t i=0; i<delay_cycle; i++);
 }
 
 /**
@@ -426,10 +426,12 @@ int xl1278_SetRxContConfig(SPI_HandleTypeDef *hspi)
 int xl1278_SetTxConfig(SPI_HandleTypeDef *hspi)
 {
 	int status = 0;
+	uint8_t DioMapping1 = xl1278_DIOMAPPING_DIO0_TxDone | xl1278_DIOMAPPING_DIO1_Default | xl1278_DIOMAPPING_DIO2_Default | xl1278_DIOMAPPING_DIO3_Default;
 
 	status |= xl1278_RegWrite(hspi, xl1278_RegPADAC, xl1278_PADAC_20dBm);
 	status |= xl1278_RegWrite(hspi, xl1278_RegHopPeriod, xl1278_FreqHopping_Disable);
 	status |= xl1278_RegWrite(hspi, xl1278_RegIrqFlagsMask, ~xl1278_IrqFlag_TxDoneMask);//Enable TxDone interrupt
+	status |= xl1278_RegWrite(hspi, xl1278_RegDIOMAPPING1, DioMapping1);
 	status |= xl1278_ClearIrq(hspi);
 	status |= xl1278_RegWrite(hspi, xl1278_RegFifoTxBaseAddr, xl1278_TxFifoBaseAddr);
 	status |= xl1278_RegWrite(hspi, xl1278_RegFifoRxBaseAddr, xl1278_RxFifoBaseAddr);
@@ -523,7 +525,7 @@ int xl1278_Init(SPI_HandleTypeDef *hspi, XL1278_InitTypeDef *Config)
 	int status = 0;
 	
 	xl1278_SetSleep(hspi);
-	HAL_Delay(20);
+	Delay_cycles(2000000);
 	status |=  xl1278_RegWrite(hspi, xl1278_RegOpMode, Config->OpMode);
 	
 	status |= xl1278_SetFreq(hspi, Config->Freq);
@@ -549,7 +551,7 @@ int xl1278_Init(SPI_HandleTypeDef *hspi, XL1278_InitTypeDef *Config)
 	status |= xl1278_RegWrite(hspi, xl1278_RegDIOMAPPING2, Config->DioMapping2);
 	
 	xl1278_SetStandby(hspi);
-	HAL_Delay(20);
+	Delay_cycles(2000000);
 	return status;
 }
 
@@ -582,7 +584,7 @@ void LoRa_Init(void)
 	xl1278_Reset();
 
 	LoRa0.Init = InitConfig;
-	LoRa0.Init.Freq = 434000000;
+	LoRa0.Init.Freq = 488800000;
 	xl1278_DeviceCheak(&LoRa0);
 	if (LoRa0.State == DEVICE_STATE_IDLE)
 	{
@@ -1262,15 +1264,28 @@ void LoRa_Init(void)
 //	return xl1278_OK;
 //}
 //
+
+
+
+/**
+ *
+ */
 __weak void xl1278_TxCpltCallback(void)
 {
 
 }
 
+
+
+/**
+ *
+ */
 __weak void xl1278_RxCpltCallback(void)
 {
 
 }
+
+
 //
 //
 //XL1278_Event xl1278_TxDonePolling()

@@ -404,7 +404,7 @@ extern XL1278_Device_PCB LoRa0;
 #define	xl1278_RESET_PIN		        		GPIO_PIN_3
 #define	xl1278_NSS_PORT							GPIOA
 #define	xl1278_NSS_PIN							GPIO_PIN_4
-#define	xl1278_DIO0_PORT						GPIO_A
+#define	xl1278_DIO0_PORT						GPIOA
 #define	xl1278_DIO0_PIN							GPIO_PIN_5
 
 
@@ -506,7 +506,7 @@ int xl1278_RxPacket(SPI_HandleTypeDef *hspi, uint8_t *pdata, uint16_t *length);
 int xl1278_TxPacket(SPI_HandleTypeDef *hspi, uint8_t *pdata, uint16_t length);
 int xl1278_Init(SPI_HandleTypeDef *hspi, XL1278_InitTypeDef *Config);
 void LoRa_Init(void);
-
+void xl1278_DeviceCheak(XL1278_Device_PCB *cpcb);
 //
 ///* 这是将几个模块整合成一个簇 */
 //void xl1278_RxCluster0_Init(void);
@@ -535,8 +535,8 @@ void xl1278_Channel_Disable(SPI_HandleTypeDef *hspi);
 //XL1278_Event xl1278_TxDonePolling();
 //XL1278_Event xl1278_RxDonePolling();
 //void xl1278_ClusterInit(XL1278_Cluster_PCB *cpcb, uint32_t DeviceID);
-void xl1278_TxCpltCallback(void);
-void xl1278_RxCpltCallback(void);
+__weak void xl1278_TxCpltCallback(void);
+__weak void xl1278_RxCpltCallback(void);
 
 
 

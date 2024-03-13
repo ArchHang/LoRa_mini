@@ -85,9 +85,7 @@ lvgl/src/hal/lv_hal_disp.o: ../lvgl/src/hal/lv_hal_disp.c \
  ../lvgl/src/hal/../draw/sw/../../misc/lv_area.h \
  ../lvgl/src/hal/../draw/sw/../lv_draw_mask.h \
  ../lvgl/src/hal/../draw/sw/../lv_draw.h \
- ../lvgl/src/hal/../draw/sw/../../hal/lv_hal_disp.h \
- ../lvgl/src/hal/../extra/themes/default/lv_theme_default.h \
- ../lvgl/src/hal/../extra/themes/default/../../../core/lv_obj.h
+ ../lvgl/src/hal/../draw/sw/../../hal/lv_hal_disp.h
 ../lvgl/src/hal/lv_hal.h:
 ../lvgl/src/hal/lv_hal_disp.h:
 ../lvgl/src/hal/../draw/lv_draw.h:
@@ -185,5 +183,3 @@ E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/hal/../draw/sw/../lv_draw_mask.h:
 ../lvgl/src/hal/../draw/sw/../lv_draw.h:
 ../lvgl/src/hal/../draw/sw/../../hal/lv_hal_disp.h:
-../lvgl/src/hal/../extra/themes/default/lv_theme_default.h:
-../lvgl/src/hal/../extra/themes/default/../../../core/lv_obj.h:

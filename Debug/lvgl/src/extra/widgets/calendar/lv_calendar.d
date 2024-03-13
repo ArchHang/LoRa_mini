@@ -199,8 +199,7 @@ lvgl/src/extra/widgets/calendar/lv_calendar.o: \
  ../lvgl/src/extra/widgets/calendar/../../../../src/extra/others/monkey/lv_monkey.h \
  ../lvgl/src/extra/widgets/calendar/../../../../src/extra/others/monkey/../../../lvgl.h \
  ../lvgl/src/extra/widgets/calendar/../../../../src/extra/others/gridnav/lv_gridnav.h \
- ../lvgl/src/extra/widgets/calendar/../../../../src/extra/others/gridnav/../../../core/lv_obj.h \
- ../lvgl/src/extra/widgets/calendar/../../../misc/lv_assert.h
+ ../lvgl/src/extra/widgets/calendar/../../../../src/extra/others/gridnav/../../../core/lv_obj.h
 ../lvgl/src/extra/widgets/calendar/lv_calendar.h:
 ../lvgl/src/extra/widgets/calendar/../../../widgets/lv_btnmatrix.h:
 ../lvgl/src/extra/widgets/calendar/../../../widgets/../lv_conf_internal.h:
@@ -401,4 +400,3 @@ E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/extra/widgets/calendar/../../../../src/extra/others/monkey/../../../lvgl.h:
 ../lvgl/src/extra/widgets/calendar/../../../../src/extra/others/gridnav/lv_gridnav.h:
 ../lvgl/src/extra/widgets/calendar/../../../../src/extra/others/gridnav/../../../core/lv_obj.h:
-../lvgl/src/extra/widgets/calendar/../../../misc/lv_assert.h:
