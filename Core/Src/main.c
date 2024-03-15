@@ -49,7 +49,7 @@ typedef enum {
 	KEY_DOWN,
 	KEY_PRESS,
 	KEY_UP,
-	KEY_WFN,	//失效按键，直到下�??次按�??
+	KEY_WFN,	//失效按键，直到下�???次按�???
 	KEY_LOCK
 
 } Key_EventTypeDef;
@@ -182,6 +182,7 @@ void System_EnterStop(void)
     __HAL_RCC_PWR_CLK_ENABLE();
     // 清除唤醒标记
     __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+    HAL_PWREx_EnableLowPowerRunMode();
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFE);
 	HAL_Init();
 	SystemClock_Config();
@@ -358,7 +359,7 @@ void lv_scr_init(void)
 void lv_ex_label(void)
 {
 
-	/* 传感器信息屏�?? */
+	/* 传感器信息屏�??? */
 	label = lv_label_create(scr1);
     lv_label_set_recolor(label, true);
     lv_label_set_long_mode(label, LV_LABEL_LONG_CLIP); /*Circular scroll*/
