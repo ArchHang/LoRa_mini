@@ -4,7 +4,7 @@ lvgl/src/extra/widgets/calendar/lv_calendar_header_dropdown.o: \
  ../lvgl/src/extra/widgets/calendar/../../../core/lv_obj.h \
  ../lvgl/src/extra/widgets/calendar/../../../core/../lv_conf_internal.h \
  ../lvgl/src/extra/widgets/calendar/../../../core/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/extra/widgets/calendar/../../../core/../misc/lv_style.h \
  ../lvgl/src/extra/widgets/calendar/../../../core/../misc/../font/lv_font.h \
  ../lvgl/src/extra/widgets/calendar/../../../core/../misc/../font/../lv_conf_internal.h \
@@ -83,7 +83,7 @@ lvgl/src/extra/widgets/calendar/lv_calendar_header_dropdown.o: \
 ../lvgl/src/extra/widgets/calendar/../../../core/lv_obj.h:
 ../lvgl/src/extra/widgets/calendar/../../../core/../lv_conf_internal.h:
 ../lvgl/src/extra/widgets/calendar/../../../core/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/extra/widgets/calendar/../../../core/../misc/lv_style.h:
 ../lvgl/src/extra/widgets/calendar/../../../core/../misc/../font/lv_font.h:
 ../lvgl/src/extra/widgets/calendar/../../../core/../misc/../font/../lv_conf_internal.h:

@@ -1,7 +1,7 @@
 lvgl/src/core/lv_obj_tree.o: ../lvgl/src/core/lv_obj_tree.c \
  ../lvgl/src/core/lv_obj.h ../lvgl/src/core/../lv_conf_internal.h \
  ../lvgl/src/core/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/core/../misc/lv_style.h \
  ../lvgl/src/core/../misc/../font/lv_font.h \
  ../lvgl/src/core/../misc/../font/../lv_conf_internal.h \
@@ -71,7 +71,7 @@ lvgl/src/core/lv_obj_tree.o: ../lvgl/src/core/lv_obj_tree.c \
 ../lvgl/src/core/lv_obj.h:
 ../lvgl/src/core/../lv_conf_internal.h:
 ../lvgl/src/core/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/core/../misc/lv_style.h:
 ../lvgl/src/core/../misc/../font/lv_font.h:
 ../lvgl/src/core/../misc/../font/../lv_conf_internal.h:

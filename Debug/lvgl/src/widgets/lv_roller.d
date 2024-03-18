@@ -2,7 +2,7 @@ lvgl/src/widgets/lv_roller.o: ../lvgl/src/widgets/lv_roller.c \
  ../lvgl/src/widgets/lv_roller.h \
  ../lvgl/src/widgets/../lv_conf_internal.h \
  ../lvgl/src/widgets/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/widgets/../core/lv_obj.h \
  ../lvgl/src/widgets/../core/../lv_conf_internal.h \
  ../lvgl/src/widgets/../core/../misc/lv_style.h \
@@ -92,7 +92,7 @@ lvgl/src/widgets/lv_roller.o: ../lvgl/src/widgets/lv_roller.c \
 ../lvgl/src/widgets/lv_roller.h:
 ../lvgl/src/widgets/../lv_conf_internal.h:
 ../lvgl/src/widgets/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/widgets/../core/lv_obj.h:
 ../lvgl/src/widgets/../core/../lv_conf_internal.h:
 ../lvgl/src/widgets/../core/../misc/lv_style.h:

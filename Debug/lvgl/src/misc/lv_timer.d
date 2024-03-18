@@ -1,7 +1,7 @@
 lvgl/src/misc/lv_timer.o: ../lvgl/src/misc/lv_timer.c \
  ../lvgl/src/misc/lv_timer.h ../lvgl/src/misc/../lv_conf_internal.h \
  ../lvgl/src/misc/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/misc/../hal/lv_hal_tick.h \
  ../lvgl/src/misc/../hal/../lv_conf_internal.h \
  ../lvgl/src/misc/lv_assert.h ../lvgl/src/misc/lv_log.h \
@@ -26,7 +26,7 @@ lvgl/src/misc/lv_timer.o: ../lvgl/src/misc/lv_timer.c \
 ../lvgl/src/misc/lv_timer.h:
 ../lvgl/src/misc/../lv_conf_internal.h:
 ../lvgl/src/misc/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/misc/../hal/lv_hal_tick.h:
 ../lvgl/src/misc/../hal/../lv_conf_internal.h:
 ../lvgl/src/misc/lv_assert.h:

@@ -510,9 +510,9 @@ void xl1278_DeviceCheak(XL1278_Device_PCB *cpcb)
 void xl1278_Reset(void)
 {
 	HAL_GPIO_WritePin(xl1278_RESET_PORT, xl1278_RESET_PIN, GPIO_PIN_RESET);
-	Delay_cycles(8000000);
+	Delay_cycles(4000000);
 	HAL_GPIO_WritePin(xl1278_RESET_PORT, xl1278_RESET_PIN, GPIO_PIN_SET);
-	Delay_cycles(8000000);
+	Delay_cycles(4000000);
 }
 
 

@@ -1,7 +1,7 @@
 lvgl/src/draw/lv_img_decoder.o: ../lvgl/src/draw/lv_img_decoder.c \
  ../lvgl/src/draw/lv_img_decoder.h ../lvgl/src/draw/../lv_conf_internal.h \
  ../lvgl/src/draw/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/draw/lv_img_buf.h ../lvgl/src/draw/../misc/lv_color.h \
  ../lvgl/src/draw/../misc/../lv_conf_internal.h \
  ../lvgl/src/draw/../misc/lv_assert.h ../lvgl/src/draw/../misc/lv_log.h \
@@ -40,7 +40,7 @@ lvgl/src/draw/lv_img_decoder.o: ../lvgl/src/draw/lv_img_decoder.c \
 ../lvgl/src/draw/lv_img_decoder.h:
 ../lvgl/src/draw/../lv_conf_internal.h:
 ../lvgl/src/draw/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/draw/lv_img_buf.h:
 ../lvgl/src/draw/../misc/lv_color.h:
 ../lvgl/src/draw/../misc/../lv_conf_internal.h:

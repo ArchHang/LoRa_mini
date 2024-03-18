@@ -3,7 +3,7 @@ lvgl/src/extra/others/snapshot/lv_snapshot.o: \
  ../lvgl/src/extra/others/snapshot/lv_snapshot.h \
  ../lvgl/src/extra/others/snapshot/../../../lv_conf_internal.h \
  ../lvgl/src/extra/others/snapshot/../../../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/extra/others/snapshot/../../../core/lv_obj.h \
  ../lvgl/src/extra/others/snapshot/../../../core/../lv_conf_internal.h \
  ../lvgl/src/extra/others/snapshot/../../../core/../misc/lv_style.h \
@@ -83,7 +83,7 @@ lvgl/src/extra/others/snapshot/lv_snapshot.o: \
 ../lvgl/src/extra/others/snapshot/lv_snapshot.h:
 ../lvgl/src/extra/others/snapshot/../../../lv_conf_internal.h:
 ../lvgl/src/extra/others/snapshot/../../../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/extra/others/snapshot/../../../core/lv_obj.h:
 ../lvgl/src/extra/others/snapshot/../../../core/../lv_conf_internal.h:
 ../lvgl/src/extra/others/snapshot/../../../core/../misc/lv_style.h:

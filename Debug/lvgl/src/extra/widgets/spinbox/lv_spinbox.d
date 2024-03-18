@@ -6,7 +6,7 @@ lvgl/src/extra/widgets/spinbox/lv_spinbox.o: \
  ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/lv_log.h \
  ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/../lv_conf_internal.h \
  ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/lv_types.h \
  ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/lv_timer.h \
  ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/lv_math.h \
@@ -201,7 +201,7 @@ lvgl/src/extra/widgets/spinbox/lv_spinbox.o: \
 ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/lv_log.h:
 ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/../lv_conf_internal.h:
 ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/lv_types.h:
 ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/lv_timer.h:
 ../lvgl/src/extra/widgets/spinbox/../../../../src/misc/lv_math.h:

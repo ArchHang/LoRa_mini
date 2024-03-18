@@ -4,7 +4,7 @@ lvgl/src/extra/widgets/keyboard/lv_keyboard.o: \
  ../lvgl/src/extra/widgets/keyboard/../../../widgets/lv_btnmatrix.h \
  ../lvgl/src/extra/widgets/keyboard/../../../widgets/../lv_conf_internal.h \
  ../lvgl/src/extra/widgets/keyboard/../../../widgets/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/extra/widgets/keyboard/../../../widgets/../core/lv_obj.h \
  ../lvgl/src/extra/widgets/keyboard/../../../widgets/../core/../lv_conf_internal.h \
  ../lvgl/src/extra/widgets/keyboard/../../../widgets/../core/../misc/lv_style.h \
@@ -92,7 +92,7 @@ lvgl/src/extra/widgets/keyboard/lv_keyboard.o: \
 ../lvgl/src/extra/widgets/keyboard/../../../widgets/lv_btnmatrix.h:
 ../lvgl/src/extra/widgets/keyboard/../../../widgets/../lv_conf_internal.h:
 ../lvgl/src/extra/widgets/keyboard/../../../widgets/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/extra/widgets/keyboard/../../../widgets/../core/lv_obj.h:
 ../lvgl/src/extra/widgets/keyboard/../../../widgets/../core/../lv_conf_internal.h:
 ../lvgl/src/extra/widgets/keyboard/../../../widgets/../core/../misc/lv_style.h:

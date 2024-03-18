@@ -5,7 +5,7 @@ lvgl/src/draw/sw/lv_draw_sw_dither.o: \
  ../lvgl/src/draw/sw/../../core/../misc/lv_area.h \
  ../lvgl/src/draw/sw/../../core/../misc/../lv_conf_internal.h \
  ../lvgl/src/draw/sw/../../core/../misc/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/draw/sw/lv_draw_sw_gradient.h \
  ../lvgl/src/draw/sw/../../misc/lv_color.h \
  ../lvgl/src/draw/sw/../../misc/../lv_conf_internal.h \
@@ -31,7 +31,7 @@ lvgl/src/draw/sw/lv_draw_sw_dither.o: \
 ../lvgl/src/draw/sw/../../core/../misc/lv_area.h:
 ../lvgl/src/draw/sw/../../core/../misc/../lv_conf_internal.h:
 ../lvgl/src/draw/sw/../../core/../misc/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/draw/sw/lv_draw_sw_gradient.h:
 ../lvgl/src/draw/sw/../../misc/lv_color.h:
 ../lvgl/src/draw/sw/../../misc/../lv_conf_internal.h:

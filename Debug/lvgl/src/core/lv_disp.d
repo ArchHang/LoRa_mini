@@ -4,7 +4,7 @@ lvgl/src/core/lv_disp.o: ../lvgl/src/core/lv_disp.c \
  ../lvgl/src/core/../hal/../draw/lv_draw.h \
  ../lvgl/src/core/../hal/../draw/../lv_conf_internal.h \
  ../lvgl/src/core/../hal/../draw/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/core/../hal/../draw/../misc/lv_style.h \
  ../lvgl/src/core/../hal/../draw/../misc/../font/lv_font.h \
  ../lvgl/src/core/../hal/../draw/../misc/../font/../lv_conf_internal.h \
@@ -75,7 +75,7 @@ lvgl/src/core/lv_disp.o: ../lvgl/src/core/lv_disp.c \
 ../lvgl/src/core/../hal/../draw/lv_draw.h:
 ../lvgl/src/core/../hal/../draw/../lv_conf_internal.h:
 ../lvgl/src/core/../hal/../draw/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/core/../hal/../draw/../misc/lv_style.h:
 ../lvgl/src/core/../hal/../draw/../misc/../font/lv_font.h:
 ../lvgl/src/core/../hal/../draw/../misc/../font/../lv_conf_internal.h:

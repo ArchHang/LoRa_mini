@@ -1,7 +1,7 @@
 lvgl/src/core/lv_group.o: ../lvgl/src/core/lv_group.c \
  ../lvgl/src/core/lv_group.h ../lvgl/src/core/../lv_conf_internal.h \
  ../lvgl/src/core/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/core/../misc/lv_ll.h ../lvgl/src/core/../misc/lv_types.h \
  ../lvgl/src/core/../misc/lv_gc.h \
  ../lvgl/src/core/../misc/../lv_conf_internal.h \
@@ -94,7 +94,7 @@ lvgl/src/core/lv_group.o: ../lvgl/src/core/lv_group.c \
 ../lvgl/src/core/lv_group.h:
 ../lvgl/src/core/../lv_conf_internal.h:
 ../lvgl/src/core/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/core/../misc/lv_ll.h:
 ../lvgl/src/core/../misc/lv_types.h:
 ../lvgl/src/core/../misc/lv_gc.h:

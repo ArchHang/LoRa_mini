@@ -1,7 +1,7 @@
 lvgl/src/font/lv_font_fmt_txt.o: ../lvgl/src/font/lv_font_fmt_txt.c \
  ../lvgl/src/font/lv_font.h ../lvgl/src/font/../lv_conf_internal.h \
  ../lvgl/src/font/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/font/lv_symbol_def.h ../lvgl/src/font/../misc/lv_area.h \
  ../lvgl/src/font/../misc/../lv_conf_internal.h \
  ../lvgl/src/font/lv_font_fmt_txt.h ../lvgl/src/font/../misc/lv_assert.h \
@@ -30,7 +30,7 @@ lvgl/src/font/lv_font_fmt_txt.o: ../lvgl/src/font/lv_font_fmt_txt.c \
 ../lvgl/src/font/lv_font.h:
 ../lvgl/src/font/../lv_conf_internal.h:
 ../lvgl/src/font/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/font/lv_symbol_def.h:
 ../lvgl/src/font/../misc/lv_area.h:
 ../lvgl/src/font/../misc/../lv_conf_internal.h:

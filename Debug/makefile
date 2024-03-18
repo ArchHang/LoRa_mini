@@ -97,8 +97,8 @@ all: main-build
 main-build: LoRa_mini.elf secondary-outputs
 
 # Tool invocations
-LoRa_mini.elf LoRa_mini.map: $(OBJS) $(USER_OBJS) E:\GitHub_Clone\CubeIDE_Project\LoRa_mini\STM32L431RCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "LoRa_mini.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\GitHub_Clone\CubeIDE_Project\LoRa_mini\STM32L431RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LoRa_mini.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+LoRa_mini.elf LoRa_mini.map: $(OBJS) $(USER_OBJS) E:\STM32_Project\CubeIDE\LoRa_mini\LoRa_mini\STM32L431RCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "LoRa_mini.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\STM32_Project\CubeIDE\LoRa_mini\LoRa_mini\STM32L431RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LoRa_mini.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

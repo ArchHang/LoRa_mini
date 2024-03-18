@@ -2,7 +2,7 @@ lvgl/src/misc/lv_style_gen.o: ../lvgl/src/misc/lv_style_gen.c \
  ../lvgl/src/misc/lv_style.h ../lvgl/src/misc/../font/lv_font.h \
  ../lvgl/src/misc/../font/../lv_conf_internal.h \
  ../lvgl/src/misc/../font/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/misc/../font/lv_symbol_def.h \
  ../lvgl/src/misc/../font/../misc/lv_area.h \
  ../lvgl/src/misc/../font/../misc/../lv_conf_internal.h \
@@ -17,7 +17,7 @@ lvgl/src/misc/lv_style_gen.o: ../lvgl/src/misc/lv_style_gen.c \
 ../lvgl/src/misc/../font/lv_font.h:
 ../lvgl/src/misc/../font/../lv_conf_internal.h:
 ../lvgl/src/misc/../font/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/misc/../font/lv_symbol_def.h:
 ../lvgl/src/misc/../font/../misc/lv_area.h:
 ../lvgl/src/misc/../font/../misc/../lv_conf_internal.h:

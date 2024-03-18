@@ -4,7 +4,7 @@ lvgl/src/extra/others/gridnav/lv_gridnav.o: \
  ../lvgl/src/extra/others/gridnav/../../../core/lv_obj.h \
  ../lvgl/src/extra/others/gridnav/../../../core/../lv_conf_internal.h \
  ../lvgl/src/extra/others/gridnav/../../../core/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/extra/others/gridnav/../../../core/../misc/lv_style.h \
  ../lvgl/src/extra/others/gridnav/../../../core/../misc/../font/lv_font.h \
  ../lvgl/src/extra/others/gridnav/../../../core/../misc/../font/../lv_conf_internal.h \
@@ -83,7 +83,7 @@ lvgl/src/extra/others/gridnav/lv_gridnav.o: \
 ../lvgl/src/extra/others/gridnav/../../../core/lv_obj.h:
 ../lvgl/src/extra/others/gridnav/../../../core/../lv_conf_internal.h:
 ../lvgl/src/extra/others/gridnav/../../../core/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/extra/others/gridnav/../../../core/../misc/lv_style.h:
 ../lvgl/src/extra/others/gridnav/../../../core/../misc/../font/lv_font.h:
 ../lvgl/src/extra/others/gridnav/../../../core/../misc/../font/../lv_conf_internal.h:

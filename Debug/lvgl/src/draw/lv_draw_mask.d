@@ -1,7 +1,7 @@
 lvgl/src/draw/lv_draw_mask.o: ../lvgl/src/draw/lv_draw_mask.c \
  ../lvgl/src/draw/lv_draw.h ../lvgl/src/draw/../lv_conf_internal.h \
  ../lvgl/src/draw/../lv_conf_kconfig.h \
- E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h \
+ E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h \
  ../lvgl/src/draw/../misc/lv_style.h \
  ../lvgl/src/draw/../misc/../font/lv_font.h \
  ../lvgl/src/draw/../misc/../font/../lv_conf_internal.h \
@@ -40,7 +40,7 @@ lvgl/src/draw/lv_draw_mask.o: ../lvgl/src/draw/lv_draw_mask.c \
 ../lvgl/src/draw/lv_draw.h:
 ../lvgl/src/draw/../lv_conf_internal.h:
 ../lvgl/src/draw/../lv_conf_kconfig.h:
-E:/GitHub_Clone/CubeIDE_Project/LoRa_mini/lvgl/lv_conf.h:
+E:/STM32_Project/CubeIDE/LoRa_mini/LoRa_mini/lvgl/lv_conf.h:
 ../lvgl/src/draw/../misc/lv_style.h:
 ../lvgl/src/draw/../misc/../font/lv_font.h:
 ../lvgl/src/draw/../misc/../font/../lv_conf_internal.h:

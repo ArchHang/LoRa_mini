@@ -18,7 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "adc.h"
+#include "rtc.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -49,7 +49,7 @@ typedef enum {
 	KEY_DOWN,
 	KEY_PRESS,
 	KEY_UP,
-	KEY_WFN,	//失效按键，直到下�???次按�???
+	KEY_WFN,	//失效按键，直到下�?????????次按�?????????
 	KEY_LOCK
 
 } Key_EventTypeDef;
@@ -84,6 +84,8 @@ typedef enum {
 #define LoRaTest_STATE_WAITFORIDLE	2
 #define LORATEST_PKTSIZE			255
 
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -117,9 +119,9 @@ void Key_UnLock(void);
 /* 系统参数 */
 uint32_t __SYS_TIME__ = 0;
 uint32_t Screen_State = 0;
-uint32_t Screen_Off_Timeout = 30;
+uint32_t Screen_Off_Timeout = 10;
 uint32_t Screen_Off_Timeout_End;
-uint32_t MCU_PowerOff_Timeout = 45;
+uint32_t MCU_PowerOff_Timeout = 15;
 uint32_t MCU_PowerOff_Timeout_End;
 
 
@@ -143,7 +145,7 @@ float disc_y = 0;
 int move_flag = 0;
 
 /* LoRa测试模式参数 */
-int LoRaTest_Mode = LORATEST_MODE_TX;
+int LoRaTest_Mode = LORATEST_MODE_RX;
 int LoRaTest_State = LoRaTest_STATE_IDLE;
 RAM2 uint8_t LoRaTest_TxData[256] = {0};
 RAM2 uint8_t LoRaTest_RxData[256] = {0};
@@ -173,22 +175,31 @@ void System_EnterSleep(void)
  */
 void System_EnterStop(void)
 {
+//	HAL_PWR_EnableWakeUpPin(GPIO_PIN_9);
 	HAL_TIM_Base_Stop_IT(&htim7);
 	HAL_TIM_Base_Stop_IT(&htim15);
 	HAL_TIM_Base_Stop_IT(&htim2);
-//	HAL_SuspendTick();
+	HAL_SPI_DeInit(&hspi1);
+	HAL_SPI_DeInit(&hspi2);
+	HAL_SPI_DeInit(&hspi3);
+	HAL_UART_DeInit(&huart1);
+	HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 10, RTC_WAKEUPCLOCK_CK_SPRE_16BITS);
+	HAL_SuspendTick();
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET);
     // 使能PWR时钟
     __HAL_RCC_PWR_CLK_ENABLE();
     // 清除唤醒标记
     __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
-    HAL_PWREx_EnableLowPowerRunMode();
-	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFE);
-	HAL_Init();
+//    HAL_PWREx_EnableLowPowerRunMode();
+	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+	HAL_ResumeTick();
+	HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
+//	HAL_Init();
 	SystemClock_Config();
-//	hadc1.State = HAL_ADC_STATE_RESET;
-//	MX_ADC1_Init();
-	HAL_ADC_MspInit(&hadc1);
+	HAL_SPI_Init(&hspi1);
+	HAL_SPI_Init(&hspi2);
+	HAL_SPI_Init(&hspi3);
+	MX_USART1_UART_Init();
 	Key_WaitForNext();
 	LCD_DisplayOn();
 	HAL_TIM_Base_Start_IT(&htim2);
@@ -236,6 +247,8 @@ void Key_UnLock(void)
 	key_event = KEY_NOEVENT;
 }
 
+#ifdef USE_STICK
+
 Stick_StateTypeDef Stick_GetState(void)
 {
 	return stick_state;
@@ -281,6 +294,9 @@ void Square2Disc(int Square_x, int Square_y, float *Disc_x, float *Disc_y)
 	*Disc_x = x2;
 	*Disc_y = y2;
 }
+
+#endif
+
 
 
 void CheakSER(void)
@@ -359,7 +375,7 @@ void lv_scr_init(void)
 void lv_ex_label(void)
 {
 
-	/* 传感器信息屏�??? */
+	/* 传感器信息屏�????????? */
 	label = lv_label_create(scr1);
     lv_label_set_recolor(label, true);
     lv_label_set_long_mode(label, LV_LABEL_LONG_CLIP); /*Circular scroll*/
@@ -436,7 +452,13 @@ void lv_scr2_init(void)
     scr2_lables[1] = lv_label_create(scr2);
     lv_label_set_recolor(scr2_lables[1], true);
     lv_label_set_long_mode(scr2_lables[1], LV_LABEL_LONG_CLIP); /*Circular scroll*/
-    lv_label_set_text_fmt(scr2_lables[1], "#ffffff Mode: TX#");
+    if (LoRaTest_Mode == LORATEST_MODE_TX) {
+    	lv_label_set_text_fmt(scr2_lables[1], "#ffffff Mode: TX#");
+    }
+    else {
+    	lv_label_set_text_fmt(scr2_lables[1], "#ffffff Mode: RX#");
+    }
+
     lv_obj_align(scr2_lables[1], LV_ALIGN_TOP_MID, 0, 60);
 
 
@@ -501,6 +523,13 @@ void scr_sel_lable(int sel_num)
 }
 
 
+/**
+ * @brief	RTC唤醒回调函数
+ */
+void HAL_RTCEx_WakeUpTimerEventCallback(RTC_HandleTypeDef *hrtc)
+{
+
+}
 
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -584,7 +613,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 	else if (htim == &htim15)
 	{
-		if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2) == GPIO_PIN_SET)
+		if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9) == GPIO_PIN_RESET)
 		{
 			if (key_event == KEY_NOEVENT) {
 				key_event = KEY_DOWN;
@@ -613,36 +642,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 		}
 
-		Get_Coordinate();
-		if ((fabs(x-x_mid) < 200) && (fabs(y-y_mid) < 200)) {
-			stick_state = STICK_STATE_CENTER;
-		}
-		else if ((fabs(x-x_mid) < 200) && (fabs(y-y_max) < 200)) {
-			if (stick_state == STICK_STATE_CENTER)
-				stick_event = STICK_UP;
-
-			stick_state = STICK_STATE_90;
-		}
-		else if ((fabs(x-x_mid) < 200) && (fabs(y-y_min) < 200)) {
-			if (stick_state == STICK_STATE_CENTER)
-				stick_event = STICK_DOWN;
-
-			stick_state = STICK_STATE_270;
-		}
-		else if ((fabs(x-x_max) < 200) && (fabs(y-y_mid) < 200)) {
-			if (stick_state == STICK_STATE_CENTER)
-				stick_event = STICK_RIGHT;
-
-			stick_state = STICK_STATE_0;
-		}
-		else if ((fabs(x-x_min) < 200) && (fabs(y-y_mid) < 200)) {
-			if (stick_state == STICK_STATE_CENTER)
-				stick_event = STICK_LEFT;
-
-			stick_state = STICK_STATE_180;
-		}
-		Square2Disc(x, y, &disc_x, &disc_y);
-		move_flag = 1;
 	}
 	else if (htim == &htim2)
 	{
@@ -694,10 +693,10 @@ int main(void)
   MX_SPI1_Init();
   MX_SPI2_Init();
   MX_SPI3_Init();
-  MX_ADC1_Init();
   MX_TIM2_Init();
   MX_TIM7_Init();
   MX_TIM15_Init();
+  MX_RTC_Init();
   /* USER CODE BEGIN 2 */
 //  LoRa_Init();
 //  while (0) {
@@ -709,6 +708,8 @@ int main(void)
 //
 //	  xl1278_RegRead(LoRa0.SPI_Inst, xl1278_RegOpMode, &reg_read);
 //  }
+
+
 
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_RESET);
 
@@ -874,79 +875,6 @@ int main(void)
 	  	  }
 	  }
 
-	  /* 摇杆事件 */
-	  switch (Stick_GetEvent()) {
-  	  	  case STICK_NOEVENT: {
-  	  		  break;
-  	  	  }
-
-  	  	  case STICK_UP: {
-  	  		  if (scr_sel_lab == 0) {
-  	  			  scr_sel_lab = 2;
-  	  		  }
-  	  		  else {
-  	  			  scr_sel_lab--;
-  	  		  }
-  	  		  scr_sel_lable(scr_sel_lab);
-  	  		  break;
-  	  	  }
-
-  	  	  case STICK_DOWN: {
-			  lv_obj_t * scr_act = lv_scr_act();
-
-			  if (scr_act == scr2) {
-				  scr_sel_lab = (scr_sel_lab+1) % 3;
-				  scr_sel_lable(scr_sel_lab);
-			  }
-  	  		  break;
-  	  	  }
-
-  	  	  case STICK_LEFT: {
-  	  		  break;
-  	  	  }
-
-  	  	  case STICK_RIGHT: {
-			  lv_obj_t * scr_act = lv_scr_act();
-
-			  if (scr_act == scr2) {
-				  if (LoRaTest_State == LoRaTest_STATE_IDLE) {
-					  if (LoRaTest_Mode == LORATEST_MODE_TX) {
-						  lv_label_set_text_fmt(scr2_lables[1], "#ffffff Mode: RX#");
-						  LoRaTest_Mode = LORATEST_MODE_RX;
-					  }
-					  else {
-						  lv_label_set_text_fmt(scr2_lables[1], "#ffffff Mode: TX#");
-						  LoRaTest_Mode = LORATEST_MODE_TX;
-					  }
-				  }
-
-			  }
-  	  		  break;
-  	  	  }
-
-	  	  default: {
-	  		  break;
-	  	  }
-	  }
-
-	  if (move_flag) {
-		  move_flag = 0;
-		  lv_obj_t * scr_act = lv_scr_act();
-		  if (scr_act == scr1) {
-			  lv_label_set_text_fmt(label3, "#000000 x: %d#", x);
-			  lv_label_set_text_fmt(label4, "#000000 y: %d#", y);
-			  lv_label_set_text_fmt(label5, "#000000 disc_x: %d#", (int)(disc_x * 100));
-			  lv_label_set_text_fmt(label6, "#000000 disc_y: %d#", (int)(disc_y * 100));
-
-			  line_points[1].x = disc_x * 100 + 120;
-			  line_points[1].y = disc_y * -100 + 200;
-			  lv_line_set_points(line0, line_points, sizeof(line_points) / sizeof(lv_point_t));
-		  }
-
-	  }
-	  else {
-		  //System_EnterSleep();
-	  }
 
 	  lv_label_set_text_fmt(label7, "#000000 time: %lu#", __SYS_TIME__);
 	  if (Get_SysTime() > MCU_PowerOff_Timeout_End) {
@@ -975,11 +903,17 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
+  /** Configure LSE Drive Capability
+  */
+  HAL_PWR_EnableBkUpAccess();
+  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 1;
