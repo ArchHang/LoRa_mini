@@ -49,28 +49,32 @@ typedef enum {
 	KEY_DOWN,
 	KEY_PRESS,
 	KEY_UP,
-	KEY_WFN,	//失效按键，直到下�?????????次按�?????????
+	KEY_WFN,
 	KEY_LOCK
 
 } Key_EventTypeDef;
 
-typedef enum {
-	STICK_STATE_CENTER = 0,
-	STICK_STATE_0,
-	STICK_STATE_90,
-	STICK_STATE_180,
-	STICK_STATE_270,
-} Stick_StateTypeDef;
 
-typedef enum {
-	STICK_NOEVENT = 0,
-	STICK_CLICK,
-	STICK_UP,
-	STICK_DOWN,
-	STICK_RIGHT,
-	STICK_LEFT,
-	STICK_LOCK
-} Stick_EventTypeDef;
+typedef struct {
+	Key_EventTypeDef	KeyEvent;
+
+	bool 		Shift;
+
+	int			KeyCode;
+
+	int			Modifiers;
+
+	void		(* KeyEventHandler)(void);
+
+	void		(* KeyDownHandler)(void);
+
+	void		(* KeyPressHandler)(void);
+
+	void		(* KeyUpHandler)(void);
+
+} Key_EventArgsTypeDef;
+
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -83,7 +87,6 @@ typedef enum {
 #define LoRaTest_STATE_BUSY			1
 #define LoRaTest_STATE_WAITFORIDLE	2
 #define LORATEST_PKTSIZE			255
-
 
 
 /* USER CODE END PD */
@@ -119,30 +122,17 @@ void Key_UnLock(void);
 /* 系统参数 */
 uint32_t __SYS_TIME__ = 0;
 uint32_t Screen_State = 0;
-uint32_t Screen_Off_Timeout = 10;
+uint32_t Screen_Off_Timeout = 0xfffffff;
 uint32_t Screen_Off_Timeout_End;
-uint32_t MCU_PowerOff_Timeout = 15;
+uint32_t MCU_PowerOff_Timeout = 0xfffffff;
 uint32_t MCU_PowerOff_Timeout_End;
 
 
 /* 输入输出设备 */
 int click_num = 0;
 Key_EventTypeDef key_event = KEY_NOEVENT;
-Stick_StateTypeDef stick_state = STICK_STATE_CENTER;
-Stick_EventTypeDef stick_event = STICK_NOEVENT;
-static int press_cnt = 0;
-
-int x = 0;
-int y = 0;
-int x_max = 4038;
-int x_min = 0;
-int x_mid = 2000;
-int y_max = 4038;
-int y_min = 0;
-int y_mid = 2011;
-float disc_x = 0;
-float disc_y = 0;
-int move_flag = 0;
+int press_cnt = 0;
+Key_EventArgsTypeDef Key_EventArgs = {0};
 
 /* LoRa测试模式参数 */
 int LoRaTest_Mode = LORATEST_MODE_RX;
@@ -158,6 +148,36 @@ int LoRaTest_SER = 0;
 uint32_t Get_SysTime(void)
 {
 	return __SYS_TIME__;
+}
+
+void LCD_PowerOff(void)
+{
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
+}
+
+void LCD_PowerOn(void)
+{
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
+}
+
+void LoRa_PowerOff(void)
+{
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_RESET);
+}
+
+void LoRa_PowerOn(void)
+{
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_SET);
+}
+
+void RS485_PowerOff(void)
+{
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
+}
+
+void RS485_PowerOn(void)
+{
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_SET);
 }
 
 /**
@@ -247,57 +267,6 @@ void Key_UnLock(void)
 	key_event = KEY_NOEVENT;
 }
 
-#ifdef USE_STICK
-
-Stick_StateTypeDef Stick_GetState(void)
-{
-	return stick_state;
-}
-
-Stick_EventTypeDef Stick_GetEvent(void)
-{
-	Stick_EventTypeDef ret_event = stick_event;
-
-	stick_event = STICK_NOEVENT;
-	return ret_event;
-}
-
-void Stick_ClearEvent(void)
-{
-	stick_event = STICK_NOEVENT;
-}
-
-void Get_Coordinate(void)
-{
-
-	HAL_ADC_Start(&hadc1);     //启动ADC转换
-	HAL_ADC_PollForConversion(&hadc1, 20);   //等待转换完成
- 	x = HAL_ADC_GetValue(&hadc1); //获取
-
-	HAL_ADC_Start(&hadc1);
-	HAL_ADC_PollForConversion(&hadc1, 20);
- 	y = HAL_ADC_GetValue(&hadc1);
-
-	HAL_ADC_Stop(&hadc1);
-}
-
-void Square2Disc(int Square_x, int Square_y, float *Disc_x, float *Disc_y)
-{
-	float x1, y1, x2, y2;
-
-	x1 = ((float)Square_x / x_mid) - 1.0f;
-	y1 = ((float)Square_y / y_mid) - 1.0f;
-
-	x2 = x1 * sqrt(1 - (pow(y1, 2) / 2));
-	y2 = y1 * sqrt(1 - (pow(x1, 2) / 2));
-
-	*Disc_x = x2;
-	*Disc_y = y2;
-}
-
-#endif
-
-
 
 void CheakSER(void)
 {
@@ -375,7 +344,7 @@ void lv_scr_init(void)
 void lv_ex_label(void)
 {
 
-	/* 传感器信息屏�????????? */
+	/* 传感器信息屏�??????????? */
 	label = lv_label_create(scr1);
     lv_label_set_recolor(label, true);
     lv_label_set_long_mode(label, LV_LABEL_LONG_CLIP); /*Circular scroll*/
@@ -391,38 +360,6 @@ void lv_ex_label(void)
     lv_obj_set_height(label2, 20);
     lv_label_set_text_fmt(label2, "#000000 click: %d#", click_num);
     lv_obj_align(label2, LV_ALIGN_TOP_LEFT, 0, 20);
-
-	label3 = lv_label_create(scr1);
-    lv_label_set_recolor(label3, true);
-    lv_label_set_long_mode(label3, LV_LABEL_LONG_CLIP); /*Circular scroll*/
-    lv_obj_set_width(label3, 240);
-    lv_obj_set_height(label3, 20);
-    lv_label_set_text_fmt(label3, "#000000 x: %d#", x);
-    lv_obj_align(label3, LV_ALIGN_TOP_LEFT, 0, 40);
-
-	label4 = lv_label_create(scr1);
-    lv_label_set_recolor(label4, true);
-    lv_label_set_long_mode(label4, LV_LABEL_LONG_CLIP); /*Circular scroll*/
-    lv_obj_set_width(label4, 240);
-    lv_obj_set_height(label4, 20);
-    lv_label_set_text_fmt(label4, "#000000 y: %d#", y);
-    lv_obj_align(label4, LV_ALIGN_TOP_LEFT, 0, 60);
-
-	label5 = lv_label_create(scr1);
-    lv_label_set_recolor(label5, true);
-    lv_label_set_long_mode(label5, LV_LABEL_LONG_CLIP); /*Circular scroll*/
-    lv_obj_set_width(label5, 240);
-    lv_obj_set_height(label5, 20);
-    lv_label_set_text_fmt(label5, "#000000 disc_x: %f#", disc_x);
-    lv_obj_align(label5, LV_ALIGN_TOP_LEFT, 0, 80);
-
-	label6 = lv_label_create(scr1);
-    lv_label_set_recolor(label6, true);
-    lv_label_set_long_mode(label6, LV_LABEL_LONG_CLIP); /*Circular scroll*/
-    lv_obj_set_width(label6, 240);
-    lv_obj_set_height(label6, 20);
-    lv_label_set_text_fmt(label6, "#000000 disc_y: %f#", disc_y);
-    lv_obj_align(label6, LV_ALIGN_TOP_LEFT, 0, 100);
 
 	label7 = lv_label_create(scr1);
     lv_label_set_recolor(label7, true);
@@ -486,21 +423,7 @@ void lv_scr2_init(void)
 
 }
 
-//void lv_scr_setting_init(void)
-//{
-//	for (int i=0; i<3; i++) {
-//		scr_setting_lables[i] = lv_label_create(scr_setting);
-//	    lv_label_set_recolor(scr_setting_lables[i], true);
-//	    lv_label_set_long_mode(scr_setting_lables[i], LV_LABEL_LONG_CLIP); /*Circular scroll*/
-//	    lv_obj_set_width(scr_setting_lables[i], 240);
-//	    lv_obj_set_height(scr_setting_lables[i], 20);
-//	    lv_obj_align(scr_setting_lables[i], LV_ALIGN_TOP_MID, 0, i*20);
-//	}
-//
-//    lv_label_set_text_fmt(scr_setting_lables[0], "#ffffff Sleep#");
-//    lv_label_set_text_fmt(scr_setting_lables[1], "#ffffff Mode: TX#");
-//    lv_label_set_text_fmt(scr_setting_lables[2], "#ffffff Start!#");
-//}
+
 
 void scr_sel_lable(int sel_num)
 {
@@ -709,9 +632,12 @@ int main(void)
 //	  xl1278_RegRead(LoRa0.SPI_Inst, xl1278_RegOpMode, &reg_read);
 //  }
 
-
+  LCD_PowerOn();
+  LoRa_PowerOn();
+  RS485_PowerOn();
 
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_RESET);
+  HAL_Delay(100);
 
   for (int i=0; i<LORATEST_PKTSIZE; i++) {
 	  LoRaTest_TxData[i] = i;

@@ -141,6 +141,8 @@ typedef enum
 
 extern XL1278_Device_PCB LoRa0;
 
+#define FREQ_32M
+
 #ifdef FREQ_32M
 #define FREQ_STEP 61.035f
 #else
