@@ -64,6 +64,8 @@ typedef struct {
 
 	int			Modifiers;
 
+	bool		Handled;
+
 	void		(* KeyEventHandler)(void);
 
 	void		(* KeyDownHandler)(void);
@@ -86,8 +88,12 @@ typedef struct {
 #define LoRaTest_STATE_IDLE			0
 #define LoRaTest_STATE_BUSY			1
 #define LoRaTest_STATE_WAITFORIDLE	2
-#define LORATEST_PKTSIZE			255
+#define LORATEST_PKTSIZE			32
 
+#define KEY_0			0
+#define KEY_1			1
+#define KEY_2			2
+#define KEY_3			3
 
 /* USER CODE END PD */
 
@@ -135,7 +141,7 @@ int press_cnt = 0;
 Key_EventArgsTypeDef Key_EventArgs = {0};
 
 /* LoRa测试模式参数 */
-int LoRaTest_Mode = LORATEST_MODE_TX;
+int LoRaTest_Mode = LORATEST_MODE_RX;
 int LoRaTest_State = LoRaTest_STATE_IDLE;
 RAM2 uint8_t LoRaTest_TxData[256] = {0};
 RAM2 uint8_t LoRaTest_RxData[256] = {0};
@@ -604,21 +610,35 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 	else if (htim == &htim15)
 	{
-		if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9) == GPIO_PIN_RESET)
-		{
-			if (Key_EventArgs.KeyEvent == KEY_NOEVENT) {
-				Key_EventArgs.KeyEvent = KEY_DOWN;
-			}
-			else if (Key_EventArgs.KeyEvent == KEY_PRESS) {
-				press_cnt++;
-			}
+		if ((GPIOB->IDR & (GPIO_PIN_8 | GPIO_PIN_9)) != (GPIO_PIN_8 | GPIO_PIN_9)) {
+			if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9) == GPIO_PIN_RESET) {
+				if (Key_EventArgs.KeyEvent == KEY_NOEVENT) {
+					Key_EventArgs.KeyEvent = KEY_DOWN;
+				}
+				else if (Key_EventArgs.KeyEvent == KEY_PRESS) {
+					press_cnt++;
+				}
 
-			LCD_DisplayOn();
-			Screen_Off_Timeout_End = Get_SysTime() + Screen_Off_Timeout;
-			MCU_PowerOff_Timeout_End = Get_SysTime() + MCU_PowerOff_Timeout;
+				Key_EventArgs.KeyCode = KEY_0;
+				LCD_DisplayOn();
+				Screen_Off_Timeout_End = Get_SysTime() + Screen_Off_Timeout;
+				MCU_PowerOff_Timeout_End = Get_SysTime() + MCU_PowerOff_Timeout;
+			}
+			else if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8) == GPIO_PIN_RESET) {
+				if (Key_EventArgs.KeyEvent == KEY_NOEVENT) {
+					Key_EventArgs.KeyEvent = KEY_DOWN;
+				}
+				else if (Key_EventArgs.KeyEvent == KEY_PRESS) {
+					press_cnt++;
+				}
+
+				Key_EventArgs.KeyCode = KEY_1;
+				LCD_DisplayOn();
+				Screen_Off_Timeout_End = Get_SysTime() + Screen_Off_Timeout;
+				MCU_PowerOff_Timeout_End = Get_SysTime() + MCU_PowerOff_Timeout;
+			}
 		}
-		else
-		{
+		else {
 			if (Key_EventArgs.KeyEvent != KEY_NOEVENT)
 			{
 				if (Key_EventArgs.KeyEvent == KEY_LOCK)
@@ -813,6 +833,13 @@ int main(void)
 
 			  if (scr_act == scr2) {
 				  if (LoRaTest_State == LoRaTest_STATE_IDLE) {
+					  if (Key_EventArgs.KeyCode == KEY_0) {
+						  LoRaTest_Mode = LORATEST_MODE_TX;
+					  }
+					  else if (Key_EventArgs.KeyCode == KEY_1) {
+						  LoRaTest_Mode = LORATEST_MODE_RX;
+					  }
+
 					  LoRaTest_State = LoRaTest_STATE_BUSY;
 					  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET);
 					  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
@@ -831,6 +858,7 @@ int main(void)
 					  if (LoRaTest_Mode == LORATEST_MODE_TX) {
 						  LoRaTest_SendPktNum = 0;
 
+						  lv_label_set_text_fmt(scr2_lables[1], "#ffffff Mode: TX#");
 						  lv_label_set_text_fmt(scr2_lables[3], "#ff0000 Transmitting Test Data...#");
 						  lv_label_set_text_fmt(scr2_lables[4], "#ffffff Send Pkt Num: %d#", LoRaTest_SendPktNum);
 						  xl1278_TxPacket(LoRa0.SPI_Inst, LoRaTest_TxData, LORATEST_PKTSIZE);
@@ -839,6 +867,7 @@ int main(void)
 					  else {
 						  LoRaTest_RecvPktNum = 0;
 
+						  lv_label_set_text_fmt(scr2_lables[1], "#ffffff Mode: RX#");
 						  lv_label_set_text_fmt(scr2_lables[3], "#ff0000 Receiving Test Data...#");
 						  lv_label_set_text_fmt(scr2_lables[4], "#ffffff Rcvd Pkt Num: %d#", LoRaTest_RecvPktNum);
 						  xl1278_SetRxContConfig(LoRa0.SPI_Inst);

@@ -510,9 +510,9 @@ void xl1278_DeviceCheak(XL1278_Device_PCB *cpcb)
 void xl1278_Reset(void)
 {
 	HAL_GPIO_WritePin(xl1278_RESET_PORT, xl1278_RESET_PIN, GPIO_PIN_RESET);
-	Delay_cycles(4000000);
+	Delay_cycles(2000000);
 	HAL_GPIO_WritePin(xl1278_RESET_PORT, xl1278_RESET_PIN, GPIO_PIN_SET);
-	Delay_cycles(4000000);
+	Delay_cycles(2000000);
 }
 
 
@@ -540,6 +540,10 @@ int xl1278_Init(SPI_HandleTypeDef *hspi, XL1278_InitTypeDef *Config)
 	
 	status |= xl1278_RegWrite(hspi, xl1278_RegModemConfig2, Config->ModemConfig2);
 	
+	if ((Config->SpreadFactor >= xl1278_SpreadFactor_2048) && (Config->Bandwidth <= xl1278_Bandwidth_125k)) {
+		status |= xl1278_RegWrite(hspi, xl1278_RegModemConfig3, Config->ModemConfig3);
+	}
+
 	status |= xl1278_RegWrite(hspi, xl1278_RegSymbTimeoutLsb, Config->SymbTimeoutLsb);
 	
 	status |= xl1278_RegWrite(hspi, xl1278_RegPreambleMsb, (Config->Preamble >> 8));
@@ -569,7 +573,7 @@ void LoRa_Init(void)
 	InitConfig.PaConfig = xl1278_PaOutputPower_20dbm;
 	InitConfig.OcpConfig = xl1278_Ocp_Disable | xl1278_OcpTrim_Default;
 	InitConfig.Lna = xl1278_LnaGain_G1 | xl1278_LnaBoosHf_Enable;
-	InitConfig.Bandwidth = xl1278_Bandwidth_500k;
+	InitConfig.Bandwidth = xl1278_Bandwidth_125k;
 	InitConfig.CodingRate = xl1278_CodingRate_4_5;
 	InitConfig.HeaderMode = xl1278_ImplicitHeaderMode_Disable;
 	InitConfig.ModemConfig1 = InitConfig.Bandwidth | InitConfig.CodingRate | InitConfig.HeaderMode;
@@ -578,13 +582,14 @@ void LoRa_Init(void)
 	InitConfig.ModemConfig2 = InitConfig.SpreadFactor | InitConfig.Crc | xl1278_SymbTimeoutMsb_Max;
 	InitConfig.SymbTimeoutLsb = 0xFF;
 	InitConfig.Preamble = 12;
+	InitConfig.ModemConfig3 = xl1278_LowDataRate_Enable | xl1278_AgcAuto_Disable;
 	InitConfig.DioMapping1 = xl1278_DIOMAPPING_DIO0_RxDone | xl1278_DIOMAPPING_DIO1_Default | xl1278_DIOMAPPING_DIO2_Default | xl1278_DIOMAPPING_DIO3_Default;
 	InitConfig.DioMapping2 = xl1278_DIOMAPPING_DIO4_Default | xl1278_DIOMAPPING_DIO5_Default;
 
 	xl1278_Reset();
 
 	LoRa0.Init = InitConfig;
-	LoRa0.Init.Freq = 488800000;
+	LoRa0.Init.Freq = 434000000;
 	xl1278_DeviceCheak(&LoRa0);
 	if (LoRa0.State == DEVICE_STATE_IDLE)
 	{

@@ -38,6 +38,8 @@ typedef struct
 	
 	uint8_t 	ModemConfig2;
 	
+	uint8_t 	ModemConfig3;
+
 	uint8_t		SymbTimeoutLsb;
 	
 	uint8_t		DioMapping1;
@@ -195,7 +197,7 @@ extern XL1278_Device_PCB LoRa0;
 #define xl1278_RegMaxPayloadLength			0x23
 #define xl1278_RegHopPeriod					0x24
 #define xl1278_RegFifoRxByteAddr			0x25
-#define xl1278_RegModemConfig				0x26
+#define xl1278_RegModemConfig3				0x26
 // I/O settings
 #define xl1278_RegDIOMAPPING1               0x40
 #define xl1278_RegDIOMAPPING2               0x41
@@ -364,9 +366,9 @@ extern XL1278_Device_PCB LoRa0;
 
 /*0x26 RegModemConfig3 Operation */
 #define xl1278_LowDataRate_Disable						0x00
-#define xl1278_LowDataRate_Enable						0x80
+#define xl1278_LowDataRate_Enable						0x08
 #define xl1278_AgcAuto_Disable							0x00
-#define xl1278_AgcAuto_Enable							0x40
+#define xl1278_AgcAuto_Enable							0x04
 
 
 /*0x40 RegDIOMAPPING1 Operation */

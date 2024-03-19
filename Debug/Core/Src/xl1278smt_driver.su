@@ -1,5 +1,5 @@
-../Core/Src/xl1278smt_driver.c:1273:13:xl1278_TxCpltCallback	0	static
-../Core/Src/xl1278smt_driver.c:1283:13:xl1278_RxCpltCallback	0	static
+../Core/Src/xl1278smt_driver.c:1278:13:xl1278_TxCpltCallback	0	static
+../Core/Src/xl1278smt_driver.c:1288:13:xl1278_RxCpltCallback	0	static
 ../Core/Src/xl1278smt_driver.c:22:6:Delay_cycles	8	static
 ../Core/Src/xl1278smt_driver.c:32:6:xl1278_Channel_Enable	0	static
 ../Core/Src/xl1278smt_driver.c:44:6:xl1278_Channel_Disable	0	static
@@ -28,5 +28,5 @@
 ../Core/Src/xl1278smt_driver.c:475:5:xl1278_TxPacket	48	static
 ../Core/Src/xl1278smt_driver.c:497:6:xl1278_DeviceCheak	24	static
 ../Core/Src/xl1278smt_driver.c:510:6:xl1278_Reset	16	static
-../Core/Src/xl1278smt_driver.c:523:5:xl1278_Init	104	static
-../Core/Src/xl1278smt_driver.c:560:6:LoRa_Init	72	static
+../Core/Src/xl1278smt_driver.c:523:5:xl1278_Init	112	static
+../Core/Src/xl1278smt_driver.c:564:6:LoRa_Init	72	static
