@@ -135,7 +135,7 @@ int press_cnt = 0;
 Key_EventArgsTypeDef Key_EventArgs = {0};
 
 /* LoRa测试模式参数 */
-int LoRaTest_Mode = LORATEST_MODE_RX;
+int LoRaTest_Mode = LORATEST_MODE_TX;
 int LoRaTest_State = LoRaTest_STATE_IDLE;
 RAM2 uint8_t LoRaTest_TxData[256] = {0};
 RAM2 uint8_t LoRaTest_RxData[256] = {0};
@@ -160,6 +160,31 @@ void LCD_PowerOn(void)
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
 }
 
+/**
+ *
+ */
+void LCD_Stop(void)
+{
+	HAL_SPI_DeInit(&hspi3);
+	HAL_GPIO_DeInit(LCD_BL_PORT, LCD_BL_PIN);
+	HAL_GPIO_DeInit(LCD_DC_PORT, LCD_DC_PIN);
+	LCD_PowerOff();
+}
+
+/**
+ *
+ */
+void LCD_WakeUp(void)
+{
+	HAL_SPI_Init(&hspi3);
+	LCD_PowerOn();
+	HAL_Delay(100);
+	LCD_Init();
+	lv_obj_t * scr_act = lv_scr_act();
+	lv_scr_load(scr_act);
+}
+
+
 void LoRa_PowerOff(void)
 {
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_RESET);
@@ -169,6 +194,26 @@ void LoRa_PowerOn(void)
 {
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_SET);
 }
+
+/**
+ *
+ */
+void LoRa_Stop(void)
+{
+	HAL_SPI_DeInit(&hspi1);
+	HAL_GPIO_DeInit(xl1278_DIO0_PORT, xl1278_DIO0_PIN);
+	HAL_GPIO_DeInit(xl1278_NSS_PORT, xl1278_NSS_PIN);
+	HAL_GPIO_DeInit(xl1278_RESET_PORT, xl1278_RESET_PIN);
+	LoRa_PowerOff();
+
+}
+
+void LoRa_WakeUp(void)
+{
+	HAL_SPI_Init(&hspi1);
+	LoRa_PowerOn();
+}
+
 
 void RS485_PowerOff(void)
 {
@@ -180,6 +225,26 @@ void RS485_PowerOn(void)
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_SET);
 }
 
+/**
+ *
+ */
+void RS485_Stop(void)
+{
+	HAL_UART_DeInit(&huart1);
+	RS485_PowerOff();
+}
+
+void RS485_WakeUp(void)
+{
+	HAL_UART_Init(&huart1);
+	RS485_PowerOn();
+}
+
+
+void System_SetWakeUpTime(uint32_t time_seconds)
+{
+	HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, time_seconds, RTC_WAKEUPCLOCK_CK_SPRE_16BITS);
+}
 /**
  * @brief	进入睡眠模式
  */
@@ -201,9 +266,9 @@ void System_EnterStop(void)
 	HAL_TIM_Base_Stop_IT(&htim2);
 	HAL_SPI_DeInit(&hspi1);
 	HAL_SPI_DeInit(&hspi2);
-	HAL_SPI_DeInit(&hspi3);
-	HAL_UART_DeInit(&huart1);
-	HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 10, RTC_WAKEUPCLOCK_CK_SPRE_16BITS);
+	LCD_Stop();
+	RS485_Stop();
+	System_SetWakeUpTime(10);
 	HAL_SuspendTick();
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET);
     // 使能PWR时钟
@@ -214,14 +279,17 @@ void System_EnterStop(void)
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
 	HAL_ResumeTick();
 	HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
-//	HAL_Init();
+
+	/* 重新配置时钟 */
 	SystemClock_Config();
+	MX_GPIO_Init();
+
 	HAL_SPI_Init(&hspi1);
 	HAL_SPI_Init(&hspi2);
-	HAL_SPI_Init(&hspi3);
-	MX_USART1_UART_Init();
+	LCD_WakeUp();
+	RS485_WakeUp();
 	Key_WaitForNext();
-	LCD_DisplayOn();
+
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_TIM_Base_Start_IT(&htim7);
 	HAL_TIM_Base_Start_IT(&htim15);
@@ -234,37 +302,37 @@ void System_EnterStop(void)
 Key_EventTypeDef Key_GetEvent(void)
 {
 
-	if (key_event == KEY_DOWN) {
-		key_event = KEY_PRESS;
+	if (Key_EventArgs.KeyEvent == KEY_DOWN) {
+		Key_EventArgs.KeyEvent = KEY_PRESS;
 		return KEY_DOWN;
 	}
 
-	if (key_event == KEY_UP) {
-		key_event = KEY_NOEVENT;
+	if (Key_EventArgs.KeyEvent == KEY_UP) {
+		Key_EventArgs.KeyEvent = KEY_NOEVENT;
 		return KEY_UP;
 	}
 
-	return key_event;
+	return Key_EventArgs.KeyEvent;
 }
 
 void Key_ClearEvent(void)
 {
-	key_event = KEY_NOEVENT;
+	Key_EventArgs.KeyEvent = KEY_NOEVENT;
 }
 
 void Key_WaitForNext(void)
 {
-	key_event = KEY_WFN;
+	Key_EventArgs.KeyEvent = KEY_WFN;
 }
 
 void Key_Lock(void)
 {
-	key_event = KEY_LOCK;
+	Key_EventArgs.KeyEvent = KEY_LOCK;
 }
 
 void Key_UnLock(void)
 {
-	key_event = KEY_NOEVENT;
+	Key_EventArgs.KeyEvent = KEY_NOEVENT;
 }
 
 
@@ -538,10 +606,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9) == GPIO_PIN_RESET)
 		{
-			if (key_event == KEY_NOEVENT) {
-				key_event = KEY_DOWN;
+			if (Key_EventArgs.KeyEvent == KEY_NOEVENT) {
+				Key_EventArgs.KeyEvent = KEY_DOWN;
 			}
-			else if (key_event == KEY_PRESS) {
+			else if (Key_EventArgs.KeyEvent == KEY_PRESS) {
 				press_cnt++;
 			}
 
@@ -551,14 +619,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		}
 		else
 		{
-			if (key_event != KEY_NOEVENT)
+			if (Key_EventArgs.KeyEvent != KEY_NOEVENT)
 			{
-				if (key_event == KEY_LOCK)
-					key_event = KEY_LOCK;
-				else if (key_event == KEY_WFN)
-					key_event = KEY_NOEVENT;
+				if (Key_EventArgs.KeyEvent == KEY_LOCK)
+					Key_EventArgs.KeyEvent = KEY_LOCK;
+				else if (Key_EventArgs.KeyEvent == KEY_WFN)
+					Key_EventArgs.KeyEvent = KEY_NOEVENT;
 				else
-					key_event = KEY_UP;
+					Key_EventArgs.KeyEvent = KEY_UP;
 
 				press_cnt = 0;
 			}
