@@ -90,10 +90,34 @@ typedef struct {
 #define LoRaTest_STATE_WAITFORIDLE	2
 #define LORATEST_PKTSIZE			32
 
+
+
+
 #define KEY_0			0
 #define KEY_1			1
 #define KEY_2			2
 #define KEY_3			3
+
+
+
+#define LED_WHITE()		do { \
+						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_RESET); \
+      	  	  	  	  	} while(0)
+
+#define LED_RED()		do { \
+						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET); \
+						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET); \
+      	  	  	  	  	} while(0)
+
+#define LED_GREEN()		do { \
+						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_2, GPIO_PIN_SET); \
+						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET); \
+      	  	  	  	  	} while(0)
+
+#define LED_BLUE()		do { \
+						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1, GPIO_PIN_SET); \
+						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_RESET); \
+      	  	  	  	  	} while(0)
 
 /* USER CODE END PD */
 
@@ -158,7 +182,8 @@ uint32_t Get_SysTime(void)
 
 void LCD_PowerOff(void)
 {
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
+	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_6);
 }
 
 void LCD_PowerOn(void)
@@ -193,7 +218,8 @@ void LCD_WakeUp(void)
 
 void LoRa_PowerOff(void)
 {
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_RESET);
+	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_5);
 }
 
 void LoRa_PowerOn(void)
@@ -206,7 +232,7 @@ void LoRa_PowerOn(void)
  */
 void LoRa_Stop(void)
 {
-	HAL_SPI_DeInit(&hspi1);
+	HAL_SPI_DeInit(LoRa0.SPI_Inst);
 	HAL_GPIO_DeInit(xl1278_DIO0_PORT, xl1278_DIO0_PIN);
 	HAL_GPIO_DeInit(xl1278_NSS_PORT, xl1278_NSS_PIN);
 	HAL_GPIO_DeInit(xl1278_RESET_PORT, xl1278_RESET_PIN);
@@ -247,6 +273,30 @@ void RS485_WakeUp(void)
 }
 
 
+void System_GPIO_CLK_DISABLE(void)
+{
+	__HAL_RCC_GPIOA_CLK_DISABLE();
+	__HAL_RCC_GPIOB_CLK_DISABLE();
+	__HAL_RCC_GPIOC_CLK_DISABLE();
+	__HAL_RCC_GPIOD_CLK_DISABLE();
+	__HAL_RCC_GPIOH_CLK_DISABLE();
+}
+
+void System_TIM_Init(void)
+{
+	MX_TIM2_Init();
+	MX_TIM7_Init();
+	MX_TIM15_Init();
+}
+
+
+void System_TIM_DeInit(void)
+{
+	HAL_TIM_Base_DeInit(&htim2);
+	HAL_TIM_Base_DeInit(&htim7);
+	HAL_TIM_Base_DeInit(&htim15);
+}
+
 void System_SetWakeUpTime(uint32_t time_seconds)
 {
 	HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, time_seconds, RTC_WAKEUPCLOCK_CK_SPRE_16BITS);
@@ -277,6 +327,7 @@ void System_EnterStop(void)
 	System_SetWakeUpTime(10);
 	HAL_SuspendTick();
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET);
+	System_GPIO_CLK_DISABLE();
     // 使能PWR时钟
     __HAL_RCC_PWR_CLK_ENABLE();
     // 清除唤醒标记
