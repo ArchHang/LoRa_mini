@@ -12,6 +12,32 @@ void W25QXX_NSS_Disable(W25QXX_HandlerTypeDef *pHandler)
 	HAL_GPIO_WritePin(pHandler->NSS_GPIO_Port, pHandler->NSS_GPIO_Pin, GPIO_PIN_SET);
 }
 
+int W25QXX_PowerDonw_Enable(W25QXX_HandlerTypeDef *pHandler)
+{
+	int status;
+	uint8_t tx_buf = W25Q_POWERDOWN_CMD;
+
+	W25QXX_NSS_Enable(pHandler);
+	status = HAL_SPI_Transmit(pHandler->phspi, &tx_buf, 1, 50);
+	W25QXX_NSS_Disable(pHandler);
+
+	return status;
+}
+
+
+int W25QXX_PowerDonw_Disable(W25QXX_HandlerTypeDef *pHandler)
+{
+	int status;
+	uint8_t tx_buf = W25Q_POWERDOWN_RELEASE_CMD;
+
+	W25QXX_NSS_Enable(pHandler);
+	status = HAL_SPI_Transmit(pHandler->phspi, &tx_buf, 1, 50);
+	W25QXX_NSS_Disable(pHandler);
+
+	return status;
+}
+
+
 int W25QXX_Write_Enable(W25QXX_HandlerTypeDef *pHandler)
 {
 	int status;

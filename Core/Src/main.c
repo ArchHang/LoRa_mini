@@ -119,6 +119,10 @@ typedef struct {
 						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_RESET); \
       	  	  	  	  	} while(0)
 
+#define LED_DeInit()	do { \
+		  	  	  	  	  HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2); \
+	  	  				} while(0)
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -320,18 +324,21 @@ void System_EnterStop(void)
 	HAL_TIM_Base_Stop_IT(&htim7);
 	HAL_TIM_Base_Stop_IT(&htim15);
 	HAL_TIM_Base_Stop_IT(&htim2);
-	HAL_SPI_DeInit(&hspi1);
+	LED_DeInit();
+	LoRa_Stop();
 	HAL_SPI_DeInit(&hspi2);
 	LCD_Stop();
 	RS485_Stop();
-	System_SetWakeUpTime(10);
+	/* 设置下次唤醒的时间 */
+	System_SetWakeUpTime(15);
 	HAL_SuspendTick();
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET);
+	System_TIM_DeInit();
 	System_GPIO_CLK_DISABLE();
     // 使能PWR时钟
-    __HAL_RCC_PWR_CLK_ENABLE();
+//    __HAL_RCC_PWR_CLK_ENABLE();
     // 清除唤醒标记
-    __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+//    __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
 //    HAL_PWREx_EnableLowPowerRunMode();
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
 	HAL_ResumeTick();
@@ -340,8 +347,9 @@ void System_EnterStop(void)
 	/* 重新配置时钟 */
 	SystemClock_Config();
 	MX_GPIO_Init();
+	System_TIM_Init();
 
-	HAL_SPI_Init(&hspi1);
+	LoRa_WakeUp();
 	HAL_SPI_Init(&hspi2);
 	LCD_WakeUp();
 	RS485_WakeUp();
@@ -352,7 +360,7 @@ void System_EnterStop(void)
 	HAL_TIM_Base_Start_IT(&htim15);
 	Screen_Off_Timeout_End = Get_SysTime() + Screen_Off_Timeout;
 	MCU_PowerOff_Timeout_End = Get_SysTime() + MCU_PowerOff_Timeout;
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_RESET);
+	LED_WHITE();
 
 }
 
@@ -775,15 +783,17 @@ int main(void)
   LoRa_PowerOn();
   RS485_PowerOn();
 
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_RESET);
+  LED_WHITE();
   HAL_Delay(100);
 
   for (int i=0; i<LORATEST_PKTSIZE; i++) {
 	  LoRaTest_TxData[i] = i;
   }
 
+
   W25QXX_Init();
-  W25QXX_Read(&flash1, (uint8_t *)&click_num, 0, 4);
+  W25QXX_PowerDonw_Enable(&flash1);
+//  W25QXX_Read(&flash1, (uint8_t *)&click_num, 0, 4);
 
   HAL_TIM_Base_Start_IT(&htim7);
   HAL_TIM_Base_Start_IT(&htim15);
@@ -853,8 +863,8 @@ int main(void)
 			  else if (scr_act == scr1) {
 				  click_num++;
 				  lv_label_set_text_fmt(label2, "#000000 click: %d#", click_num);
-				  W25QXX_Erase_Sector(&flash1, 0);
-				  W25QXX_WritePage(&flash1, (uint8_t *)&click_num, 0, 4);
+//				  W25QXX_Erase_Sector(&flash1, 0);
+//				  W25QXX_WritePage(&flash1, (uint8_t *)&click_num, 0, 4);
 			  }
 
 	  		  break;
