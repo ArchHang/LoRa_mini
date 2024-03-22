@@ -119,6 +119,11 @@ typedef struct {
 						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_RESET); \
       	  	  	  	  	} while(0)
 
+#define LED_BLACK()		do { \
+						  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET); \
+	  	  				} while(0)
+
+
 #define LED_DeInit()	do { \
 		  	  	  	  	  HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2); \
 	  	  				} while(0)
@@ -156,9 +161,9 @@ void Key_UnLock(void);
 /* 系统参数 */
 uint32_t __SYS_TIME__ = 0;
 uint32_t Screen_State = 0;
-uint32_t Screen_Off_Timeout = 0xfffffff;
+uint32_t Screen_Off_Timeout = 5000000;
 uint32_t Screen_Off_Timeout_End;
-uint32_t MCU_PowerOff_Timeout = 0xfffffff;
+uint32_t MCU_PowerOff_Timeout = 10000000;
 uint32_t MCU_PowerOff_Timeout_End;
 
 
@@ -186,8 +191,7 @@ uint32_t Get_SysTime(void)
 
 void LCD_PowerOff(void)
 {
-//	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
-	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_6);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
 }
 
 void LCD_PowerOn(void)
@@ -201,8 +205,10 @@ void LCD_PowerOn(void)
 void LCD_Stop(void)
 {
 	HAL_SPI_DeInit(&hspi3);
-	HAL_GPIO_DeInit(LCD_BL_PORT, LCD_BL_PIN);
-	HAL_GPIO_DeInit(LCD_DC_PORT, LCD_DC_PIN);
+//	HAL_GPIO_DeInit(LCD_BL_PORT, LCD_BL_PIN);
+	HAL_GPIO_WritePin(LCD_BL_PORT, LCD_BL_PIN, GPIO_PIN_RESET);
+//	HAL_GPIO_DeInit(LCD_DC_PORT, LCD_DC_PIN);
+	HAL_GPIO_WritePin(LCD_DC_PORT, LCD_DC_PIN, GPIO_PIN_RESET);
 	LCD_PowerOff();
 }
 
@@ -211,8 +217,8 @@ void LCD_Stop(void)
  */
 void LCD_WakeUp(void)
 {
-	HAL_SPI_Init(&hspi3);
 	LCD_PowerOn();
+	HAL_SPI_Init(&hspi3);
 	HAL_Delay(100);
 	LCD_Init();
 	lv_obj_t * scr_act = lv_scr_act();
@@ -222,8 +228,7 @@ void LCD_WakeUp(void)
 
 void LoRa_PowerOff(void)
 {
-//	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_RESET);
-	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_5);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_RESET);
 }
 
 void LoRa_PowerOn(void)
@@ -237,17 +242,22 @@ void LoRa_PowerOn(void)
 void LoRa_Stop(void)
 {
 	HAL_SPI_DeInit(LoRa0.SPI_Inst);
-	HAL_GPIO_DeInit(xl1278_DIO0_PORT, xl1278_DIO0_PIN);
-	HAL_GPIO_DeInit(xl1278_NSS_PORT, xl1278_NSS_PIN);
-	HAL_GPIO_DeInit(xl1278_RESET_PORT, xl1278_RESET_PIN);
+//	HAL_GPIO_DeInit(xl1278_DIO0_PORT, xl1278_DIO0_PIN);
+
+//	HAL_GPIO_DeInit(xl1278_NSS_PORT, xl1278_NSS_PIN);
+	HAL_GPIO_WritePin(xl1278_NSS_PORT, xl1278_NSS_PIN, GPIO_PIN_RESET);
+//	HAL_GPIO_DeInit(xl1278_RESET_PORT, xl1278_RESET_PIN);
+	HAL_GPIO_WritePin(xl1278_RESET_PORT, xl1278_RESET_PIN, GPIO_PIN_RESET);
 	LoRa_PowerOff();
 
 }
 
 void LoRa_WakeUp(void)
 {
-	HAL_SPI_Init(&hspi1);
 	LoRa_PowerOn();
+	HAL_SPI_Init(&hspi1);
+	HAL_GPIO_WritePin(xl1278_NSS_PORT, xl1278_NSS_PIN, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(xl1278_RESET_PORT, xl1278_RESET_PIN, GPIO_PIN_SET);
 }
 
 
@@ -272,8 +282,8 @@ void RS485_Stop(void)
 
 void RS485_WakeUp(void)
 {
-	HAL_UART_Init(&huart1);
 	RS485_PowerOn();
+	MX_USART1_UART_Init();
 }
 
 
@@ -284,6 +294,14 @@ void System_GPIO_CLK_DISABLE(void)
 	__HAL_RCC_GPIOC_CLK_DISABLE();
 	__HAL_RCC_GPIOD_CLK_DISABLE();
 	__HAL_RCC_GPIOH_CLK_DISABLE();
+}
+void System_GPIO_CLK_ENABLE(void)
+{
+	__HAL_RCC_GPIOC_CLK_ENABLE();
+	__HAL_RCC_GPIOH_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOD_CLK_ENABLE();
 }
 
 void System_TIM_Init(void)
@@ -320,18 +338,17 @@ void System_EnterSleep(void)
  */
 void System_EnterStop(void)
 {
-//	HAL_PWR_EnableWakeUpPin(GPIO_PIN_9);
 	HAL_TIM_Base_Stop_IT(&htim7);
 	HAL_TIM_Base_Stop_IT(&htim15);
 	HAL_TIM_Base_Stop_IT(&htim2);
-	LED_DeInit();
+	LED_BLACK();
 	LoRa_Stop();
 	HAL_SPI_DeInit(&hspi2);
 	LCD_Stop();
 	RS485_Stop();
-	/* 设置下次唤醒的时间 */
+	/* 设置下次唤醒的时�??? */
 	System_SetWakeUpTime(15);
-	HAL_SuspendTick();
+//	HAL_SuspendTick();
 //	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2, GPIO_PIN_SET);
 	System_TIM_DeInit();
 	System_GPIO_CLK_DISABLE();
@@ -339,14 +356,14 @@ void System_EnterStop(void)
 //    __HAL_RCC_PWR_CLK_ENABLE();
     // 清除唤醒标记
 //    __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
-//    HAL_PWREx_EnableLowPowerRunMode();
+
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
-	HAL_ResumeTick();
+//	HAL_ResumeTick();
 	HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
 
 	/* 重新配置时钟 */
 	SystemClock_Config();
-	MX_GPIO_Init();
+	System_GPIO_CLK_ENABLE();
 	System_TIM_Init();
 
 	LoRa_WakeUp();
@@ -477,7 +494,7 @@ void lv_scr_init(void)
 void lv_ex_label(void)
 {
 
-	/* 传感器信息屏�??????????? */
+	/* 传感器信息屏�?????????????? */
 	label = lv_label_create(scr1);
     lv_label_set_recolor(label, true);
     lv_label_set_long_mode(label, LV_LABEL_LONG_CLIP); /*Circular scroll*/
@@ -768,6 +785,7 @@ int main(void)
   MX_TIM15_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
+
 //  LoRa_Init();
 //  while (0) {
 //	  if (LoRa0.State == DEVICE_STATE_IDLE) {
@@ -792,8 +810,8 @@ int main(void)
 
 
   W25QXX_Init();
-  W25QXX_PowerDonw_Enable(&flash1);
-//  W25QXX_Read(&flash1, (uint8_t *)&click_num, 0, 4);
+//  W25QXX_PowerDonw_Enable(&flash1);
+  W25QXX_Read(&flash1, (uint8_t *)&click_num, 0, 4);
 
   HAL_TIM_Base_Start_IT(&htim7);
   HAL_TIM_Base_Start_IT(&htim15);
@@ -863,8 +881,8 @@ int main(void)
 			  else if (scr_act == scr1) {
 				  click_num++;
 				  lv_label_set_text_fmt(label2, "#000000 click: %d#", click_num);
-//				  W25QXX_Erase_Sector(&flash1, 0);
-//				  W25QXX_WritePage(&flash1, (uint8_t *)&click_num, 0, 4);
+				  W25QXX_Erase_Sector(&flash1, 0);
+				  W25QXX_WritePage(&flash1, (uint8_t *)&click_num, 0, 4);
 			  }
 
 	  		  break;
